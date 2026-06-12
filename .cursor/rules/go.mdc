@@ -1,0 +1,17 @@
+---
+description: CourseHub Go architecture & style rules
+globs: ["**/*.go"]
+alwaysApply: true
+---
+
+- Layered architecture: dependencies point inward to `internal/domain`.
+- `service` depends only on interfaces it declares in `internal/service/ports.go`;
+  inject concrete `storage` implementations in `cmd/server`.
+- Define small (1–3 method) interfaces where they are consumed.
+- Grading schemes: add a `grading.Strategy` type and register it — no switches elsewhere.
+- Grading reactions: add a `progress.Observer` and subscribe it in `cmd/server`.
+- Build courses via `course.Factory`, never construct `base` directly.
+- gofmt/goimports; wrap errors with `%w`; compare via `errors.Is/As`; use
+  sentinel errors from `internal/domain`.
+- `ctx context.Context` first parameter; never stored in structs.
+- Table-driven tests with `t.Run` subtests, stdlib `testing` only, ≥ 70% coverage.

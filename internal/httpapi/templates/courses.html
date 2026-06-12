@@ -1,0 +1,48 @@
+{{define "courses.html"}}{{template "header" .}}
+
+<form class="card" method="post" action="/courses" style="margin-top:24px">
+  <div class="section-title" style="margin:0 0 14px">Новий курс</div>
+  <div class="form-row" style="margin-bottom:13px">
+    <div><label>Код</label><input name="code" placeholder="CS101" required></div>
+    <div><label>Назва</label><input name="title" placeholder="Алгоритми та структури даних" required></div>
+    <div><label>Кредити</label><input name="credits" type="number" min="0" value="5"></div>
+  </div>
+  <div class="form-row">
+    <div><label>Тип</label>
+      <select name="type"><option value="standard">standard</option><option value="online">online</option></select>
+    </div>
+    <div><label>Схема оцінювання</label>
+      <select name="grading">{{range .Strategies}}<option value="{{.}}">{{.}}</option>{{end}}</select>
+    </div>
+    <div><label>Платформа (для online)</label><input name="platform" placeholder="Moodle"></div>
+  </div>
+  <label class="check"><input type="checkbox" name="certified" value="1"> Сертифікований курс</label>
+  <div><button class="btn" type="submit">{{template "ic-plus"}} Створити курс</button></div>
+</form>
+
+<div class="section-title">Каталог курсів</div>
+{{if .Courses}}
+<div class="grid cols-2">
+  {{range .Courses}}
+  <div class="card course">
+    <div class="top">
+      <span class="chip">{{.Code}}</span>
+      <span class="pill pill--active" style="text-transform:none">{{.GradingStrategy}}</span>
+    </div>
+    <h3>{{.Title}}</h3>
+    <div class="desc">{{.Describe}}</div>
+    <div class="meta">
+      <span class="tag">{{.Credits}} кред.</span>
+      {{range .Features}}<span class="tag">{{.}}</span>{{end}}
+    </div>
+  </div>
+  {{end}}
+</div>
+{{else}}
+<div class="card empty">
+  <div class="ic">{{template "ic-book"}}</div>
+  <div>Ще немає курсів.<br>Створіть перший за допомогою форми вище.</div>
+</div>
+{{end}}
+
+{{template "footer" .}}{{end}}

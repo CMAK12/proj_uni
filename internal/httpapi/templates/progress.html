@@ -1,0 +1,74 @@
+{{define "progress.html"}}{{template "header" .}}
+
+<form class="card" method="get" action="/progress" style="margin-top:24px">
+  <label>Оберіть студента</label>
+  <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+    <div style="flex:1;min-width:220px">
+      <select name="student">
+        <option value="">— оберіть студента —</option>
+        {{$sel := .Selected}}
+        {{range .Students}}<option value="{{.ID}}" {{if eq .ID $sel}}selected{{end}}>{{.Name}} ({{.Email}})</option>{{end}}
+      </select>
+    </div>
+    <button class="btn" type="submit">{{template "ic-chart"}} Показати</button>
+  </div>
+</form>
+
+{{if .Selected}}
+<form class="card" method="post" action="/enroll" style="margin-top:16px">
+  <input type="hidden" name="student" value="{{.Selected}}">
+  <label>Зарахувати на курс</label>
+  <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+    <div style="flex:1;min-width:220px">
+      <select name="course">
+        {{range .Courses}}<option value="{{.ID}}">{{.Code}} — {{.Title}}</option>{{end}}
+      </select>
+    </div>
+    <button class="btn btn-ghost" type="submit">{{template "ic-plus"}} Зарахувати</button>
+  </div>
+</form>
+
+<div class="section-title">Зарахування та прогрес</div>
+{{if .Views}}
+<div class="stack">
+  {{range .Views}}
+  <div class="card enr">
+    <div class="row1">
+      <div class="cn">{{.CourseCode}}<small>{{.CourseTitle}}</small></div>
+      <div class="meta">
+        {{if .Enrollment.Letter}}<span class="muted" style="font-size:.82rem">{{printf "%.1f" .Enrollment.FinalGrade}}</span>
+          <span class="grade grade--{{.Enrollment.Letter}}">{{.Enrollment.Letter}}</span>{{end}}
+        <span class="pill pill--{{.Enrollment.Status}}">{{.Enrollment.Status}}</span>
+      </div>
+    </div>
+    <div class="progress" style="margin-top:14px">
+      <div class="track"><span style="width:{{pctWidth .Enrollment.Progress}}"></span></div>
+      <span class="pv">{{pct .Enrollment.Progress}}</span>
+    </div>
+    <details class="grader">
+      <summary>{{template "ic-plus"}} Виставити оцінку</summary>
+      <form method="post" action="/grade">
+        <input type="hidden" name="enrollment" value="{{.Enrollment.ID}}">
+        <input type="hidden" name="student" value="{{$.Selected}}">
+        <div class="form-row">
+          <div><label>Компонент</label><input name="name" placeholder="exam" required></div>
+          <div><label>Бал</label><input name="score" type="number" step="any" required></div>
+          <div><label>Максимум</label><input name="maxScore" type="number" step="any" value="100" required></div>
+          <div><label>Вага</label><input name="weight" type="number" step="any" value="1"></div>
+          <div><label>Заплановано</label><input name="planned" type="number" min="0" value="1"></div>
+          <div><button class="btn" type="submit">Оцінити</button></div>
+        </div>
+      </form>
+    </details>
+  </div>
+  {{end}}
+</div>
+{{else}}
+<div class="card empty">
+  <div class="ic">{{template "ic-inbox"}}</div>
+  <div>Студент ще нікуди не зарахований.<br>Оберіть курс вище та натисніть «Зарахувати».</div>
+</div>
+{{end}}
+{{end}}
+
+{{template "footer" .}}{{end}}

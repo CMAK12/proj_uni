@@ -1,0 +1,45 @@
+{{define "home.html"}}{{template "header" .}}
+
+<div class="grid cols-4 mt" style="margin-top:24px">
+  <div class="card stat">
+    <div class="ic">{{template "ic-users"}}</div>
+    <div class="num">{{.StudentCount}}</div>
+    <div class="lbl">Студентів</div>
+  </div>
+  <div class="card stat">
+    <div class="ic">{{template "ic-book"}}</div>
+    <div class="num">{{.CourseCount}}</div>
+    <div class="lbl">Курсів</div>
+  </div>
+  <div class="card stat">
+    <div class="ic">{{template "ic-layers"}}</div>
+    <div class="num">{{.Credits}}</div>
+    <div class="lbl">Кредитів усього</div>
+  </div>
+  <div class="card stat">
+    <div class="ic">{{template "ic-sliders"}}</div>
+    <div class="num">{{.StrategyCount}}</div>
+    <div class="lbl">Схем оцінювання</div>
+  </div>
+</div>
+
+<div class="section-title">Патерни проєктування</div>
+<div class="grid cols-3">
+  <div class="card pat"><div class="name"><span class="dot"></span>Repository</div><p>Взаємозамінне сховище (SQLite) за інтерфейсом — бізнес-логіка не залежить від БД.</p></div>
+  <div class="card pat"><div class="name"><span class="dot"></span>Strategy</div><p>Різні схеми оцінювання: weighted, pass-fail, letter — нову додають окремим типом.</p></div>
+  <div class="card pat"><div class="name"><span class="dot"></span>Observer</div><p>Реакція на оцінювання: відстеження прогресу та сповіщення.</p></div>
+  <div class="card pat"><div class="name"><span class="dot"></span>Factory</div><p>Складання курсу з потрібною стратегією та декораторами в одному місці.</p></div>
+  <div class="card pat"><div class="name"><span class="dot"></span>Decorator</div><p>Розширення курсів без зміни базового класу: сертифікований, онлайн.</p></div>
+  <div class="card pat"><div class="name"><span class="dot"></span>Шарова архітектура</div><p>Інверсія залежностей: handler → service → repository, без циклів.</p></div>
+</div>
+
+<div class="section-title">З чого почати</div>
+<div class="card">
+  <ol class="steps">
+    <li><span><b>Додайте студента</b> на сторінці «Студенти».</span></li>
+    <li><span><b>Створіть курс</b> зі схемою оцінювання та розширеннями на сторінці «Курси».</span></li>
+    <li><span><b>Зарахуйте та оцініть</b> студента на сторінці «Прогрес» — прогрес оновиться автоматично.</span></li>
+  </ol>
+</div>
+
+{{template "footer" .}}{{end}}

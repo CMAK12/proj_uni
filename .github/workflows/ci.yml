@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Static analysis (golangci-lint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  test:
+    name: Test, coverage & SonarCloud
+    runs-on: ubuntu-latest
+    env:
+      # Required for SonarCloud. Add it under repo Settings → Secrets → Actions.
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # SonarCloud needs full history for accurate blame/new-code detection.
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: Install report tooling
+        run: |
+          go install gotest.tools/gotestsum@latest
+          go install github.com/boumenot/gocover-cobertura@latest
+
+      - name: Run tests with coverage (JSON + JUnit)
+        run: |
+          gotestsum \
+            --jsonfile report.json \
+            --junitfile junit.xml \
+            --format pkgname \
+            -- -race -covermode=atomic -coverprofile=coverage.out ./...
+
+      - name: Generate HTML & Cobertura coverage reports
+        if: always()
+        run: |
+          go tool cover -html=coverage.out -o coverage.html
+          go tool cover -func=coverage.out -o coverage.txt
+          gocover-cobertura < coverage.out > cobertura.xml
+
+      - name: Enforce coverage threshold (>= 70%)
+        run: |
+          total=$(go tool cover -func=coverage.out | awk '/^total:/ {print substr($3, 1, length($3)-1)}')
+          echo "Total coverage: ${total}%"
+          awk "BEGIN { exit !(${total} >= 70) }" || {
+            echo "::error::Coverage ${total}% is below the required 70%";
+            exit 1;
+          }
+
+      - name: Upload test & coverage reports (build artifacts)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            coverage.html
+            coverage.txt
+            coverage.out
+            cobertura.xml
+            junit.xml
+            report.json
+          retention-days: 30
+
+      - name: SonarCloud Scan
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,36 @@
+{{define "students.html"}}{{template "header" .}}
+
+<div class="grid cols-2" style="grid-template-columns:340px 1fr;margin-top:24px">
+  <form class="card" method="post" action="/students" style="align-self:start">
+    <div class="section-title" style="margin:0 0 14px">Новий студент</div>
+    <div style="margin-bottom:13px"><label>Ім'я</label><input name="name" placeholder="Іван Петренко" required></div>
+    <div style="margin-bottom:16px"><label>Email</label><input name="email" type="email" placeholder="ivan@lnu.ua" required></div>
+    <button class="btn" type="submit">{{template "ic-plus"}} Додати студента</button>
+  </form>
+
+  <div>
+    {{if .Students}}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Студент</th><th>Email</th><th>Ідентифікатор</th></tr></thead>
+        <tbody>
+        {{range .Students}}
+          <tr>
+            <td><div class="user"><span class="avatar">{{initials .Name}}</span><span>{{.Name}}</span></div></td>
+            <td>{{.Email}}</td>
+            <td class="mono">{{.ID}}</td>
+          </tr>
+        {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{else}}
+    <div class="card empty">
+      <div class="ic">{{template "ic-users"}}</div>
+      <div>Ще немає студентів.<br>Додайте першого за допомогою форми зліва.</div>
+    </div>
+    {{end}}
+  </div>
+</div>
+
+{{template "footer" .}}{{end}}

@@ -1,0 +1,17 @@
+# SQLite database files created at runtime
+*.db
+*.db-shm
+*.db-wal
+
+# Build artifacts
+/coursehub
+/server
+*.out
+
+# Test & coverage reports (generated in CI, uploaded as artifacts)
+coverage.html
+coverage.txt
+cobertura.xml
+junit.xml
+report.json
+/.scannerwork/
