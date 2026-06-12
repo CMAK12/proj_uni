@@ -1,11 +1,10 @@
 # CourseHub — система керування курсами та студентами
 
-<!-- TODO: замініть OWNER/REPO та PROJECT_KEY на реальні значення після створення
-     GitHub-репозиторію та проєкту в SonarCloud (див. «CI/CD та SonarQube»). -->
+<!-- TODO: замініть OWNER/REPO на ваш GitHub-репозиторій (напр. CMAK12/proj_uni). -->
 [![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=PROJECT_KEY&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=PROJECT_KEY)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=PROJECT_KEY&metric=coverage)](https://sonarcloud.io/summary/new_code?id=PROJECT_KEY)
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=PROJECT_KEY&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=PROJECT_KEY)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CMAK12_proj_uni&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=CMAK12_proj_uni)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=CMAK12_proj_uni&metric=coverage)](https://sonarcloud.io/summary/new_code?id=CMAK12_proj_uni)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=CMAK12_proj_uni&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=CMAK12_proj_uni)
 [![Go](https://img.shields.io/badge/Go-1.26-00ADD8?logo=go)](go.mod)
 
 Навчальний проєкт з предмету **«Аналіз та рефакторинг коду, моделювання та проектування ПЗ»**.
